@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2021 The Netty Project
+  ~ Copyright 2022 The Netty Project
   ~
   ~ The Netty Project licenses this file to you under the Apache License,
   ~ version 2.0 (the "License"); you may not use this file except in compliance
@@ -23,9 +23,9 @@
   </parent>
 
   <groupId>io.netty.contrib</groupId>
-  <artifactId>netty-template</artifactId>
+  <artifactId>netty5-security</artifactId>
   <version>5.0.0.Final-SNAPSHOT</version>
-  <name>Netty/Codec/Template</name>
+  <name>Netty/Security</name>
   <packaging>jar</packaging>
   <url>https://netty.io/</url>
   <description>
@@ -48,9 +48,9 @@
   <inceptionYear>2021</inceptionYear>
 
   <scm>
-    <url>https://github.com/netty-contrib/template</url>
-    <connection>scm:git:https://github.com/netty-contrib/template.git</connection>
-    <developerConnection>scm:git:https://github.com/netty-contrib/template.git</developerConnection>
+    <url>https://github.com/netty-contrib/security</url>
+    <connection>scm:git:https://github.com/netty-contrib/security.git</connection>
+    <developerConnection>scm:git:https://github.com/netty-contrib/security.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
 
@@ -66,9 +66,9 @@
   </developers>
 
   <properties>
-    <javaModuleName>io.netty.contrib.template</javaModuleName>
-    <netty.version>5.0.0.Final-SNAPSHOT</netty.version>
-    <netty.build.version>29</netty.build.version>
+    <javaModuleName>io.netty.contrib.security</javaModuleName>
+    <netty.version>5.0.0.Alpha3-SNAPSHOT</netty.version>
+    <netty.build.version>30</netty.build.version>
     <project.scm.id>github</project.scm.id>
     <release.gpg.keyname />
     <release.gpg.passphrase />
