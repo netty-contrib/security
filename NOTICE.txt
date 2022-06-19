@@ -32,3 +32,11 @@ This product contains the Maven wrapper scripts from 'Maven Wrapper', that provi
     * license/LICENSE.mvn-wrapper.txt (Apache License 2.0)
   * HOMEPAGE:
     * https://github.com/takari/maven-wrapper
+-------------------------------------------------------------------------------
+
+This product contains the ipaddress library by https://github.com/seancfoley, that provides IP Address utilities.
+
+  * LICENSE:
+    * license/LICENSE.ipaddress.txt (Apache License 2.0)
+  * HOMEPAGE:
+    * https://github.com/seancfoley/IPAddress

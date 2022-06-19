@@ -1,8 +1,18 @@
-= Netty 5.x Template Repository for Netty Contrib
+= Netty 5 Security Module
 
 * Netty core repository: https://github.com/netty/netty
 * License: Apache-2.0 License
 * Required Java version: Java 11
 * Maven coordinates:
-** `io.netty.contrib:netty-template:5.0.0.Final-SNAPSHOT`
+** `io.netty.contrib:netty5-security:5.0.0.Final-SNAPSHOT`
 
+
+* Features:
+    - Traffic Filter using Source IP, Source Port, Destination IP, Destination Port, and Protocol.
+    - Rate-Limiting: Connections Per IP, and Messages Per IP.
+    - Payload Inspection: Accept or Drop Payload by using Regex, or normal String.
+    - Threat Engine to drop common widespread vulnerabilities.
+    - Extendable API for using with Custom Protocol.
+
+---------
+Create issue in this repository to submit feedback or feature request.

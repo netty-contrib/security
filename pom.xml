@@ -22,11 +22,15 @@
     <version>9</version>
   </parent>
 
+  <modules>
+    <module>core</module>
+  </modules>
+
   <groupId>io.netty.contrib</groupId>
   <artifactId>netty5-security</artifactId>
   <version>5.0.0.Final-SNAPSHOT</version>
   <name>Netty/Security</name>
-  <packaging>jar</packaging>
+  <packaging>pom</packaging>
   <url>https://netty.io/</url>
   <description>
     Netty is an asynchronous event-driven network application framework for
@@ -45,7 +49,7 @@
       <url>https://www.apache.org/licenses/LICENSE-2.0</url>
     </license>
   </licenses>
-  <inceptionYear>2021</inceptionYear>
+  <inceptionYear>2022</inceptionYear>
 
   <scm>
     <url>https://github.com/netty-contrib/security</url>
@@ -69,11 +73,49 @@
     <javaModuleName>io.netty.contrib.security</javaModuleName>
     <netty.version>5.0.0.Alpha3-SNAPSHOT</netty.version>
     <netty.build.version>30</netty.build.version>
+    <mockito.version>4.6.1</mockito.version>
+    <junit.version>5.8.2</junit.version>
+    <ipaddress.version>5.3.4</ipaddress.version>
     <project.scm.id>github</project.scm.id>
     <release.gpg.keyname />
     <release.gpg.passphrase />
     <test.argLine>-D_</test.argLine>
   </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty5-buffer</artifactId>
+      <version>${netty.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty5-transport</artifactId>
+      <version>${netty.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty5-codec</artifactId>
+      <version>${netty.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.github.seancfoley</groupId>
+      <artifactId>ipaddress</artifactId>
+      <version>${ipaddress.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>${mockito.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 
   <build>
     <plugins>
@@ -176,7 +218,9 @@
               <Bundle-Name>${project.name}</Bundle-Name>
               <Bundle-SymbolicName>${project.groupId}.${project.artifactId}.source</Bundle-SymbolicName>
               <Bundle-Vendor>${project.organization.name}</Bundle-Vendor>
+              <!--suppress UnresolvedMavenProperty -->
               <Bundle-Version>${parsedVersion.osgiVersion}</Bundle-Version>
+              <!--suppress UnresolvedMavenProperty -->
               <Eclipse-SourceBundle>${project.groupId}.${project.artifactId};version="${parsedVersion.osgiVersion}";roots:="."</Eclipse-SourceBundle>
             </manifestEntries>
           </archive>
@@ -266,36 +310,4 @@
       </properties>
     </profile>
   </profiles>
-
-  <dependencies>
-    <dependency>
-      <groupId>io.netty</groupId>
-      <artifactId>netty5-buffer</artifactId>
-      <version>${netty.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>io.netty</groupId>
-      <artifactId>netty5-transport</artifactId>
-      <version>${netty.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>io.netty</groupId>
-      <artifactId>netty5-codec</artifactId>
-      <version>${netty.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-engine</artifactId>
-      <version>5.8.2</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.assertj</groupId>
-      <artifactId>assertj-core</artifactId>
-      <version>3.22.0</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
 </project>
-
