@@ -37,7 +37,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * This is a standard network handler which performs network filtering.
  * This handler instance is thread-safe and should be shared among different channels.
  */
-@ChannelHandler.Sharable
 public class StandardNetworkHandler implements ChannelHandler {
     private static final InternalLogger logger = InternalLoggerFactory.getInstance(StandardNetworkHandler.class);
     private final Map<Channel, FiveTuple> CHANNEL_TUPLE_MAP = new ConcurrentHashMap<>();
@@ -139,5 +138,10 @@ public class StandardNetworkHandler implements ChannelHandler {
 
     private FiveTuple fiveTuple(DatagramChannel channel) {
         return CHANNEL_TUPLE_MAP.computeIfAbsent(channel, ch -> Util.generateFiveTupleFrom(channel));
+    }
+
+    @Override
+    public boolean isSharable() {
+        return true;
     }
 }

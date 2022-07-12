@@ -21,6 +21,7 @@ import io.netty5.channel.socket.DatagramPacket;
 import io.netty5.channel.socket.SocketChannel;
 
 import java.math.BigInteger;
+import java.net.InetSocketAddress;
 import java.util.Objects;
 
 public final class Util {
@@ -42,8 +43,16 @@ public final class Util {
      */
     public static FiveTuple generateFiveTupleFrom(SocketChannel socketChannel) {
         Objects.requireNonNull(socketChannel, "SocketChannel");
-        return StandardFiveTuple.from(Protocol.TCP, socketChannel.remoteAddress().getPort(), socketChannel.localAddress().getPort(),
-                StaticIpAddress.of(socketChannel.remoteAddress().getAddress()), StaticIpAddress.of(socketChannel.localAddress().getAddress()));
+
+        if (socketChannel.localAddress() instanceof InetSocketAddress && socketChannel.remoteAddress() instanceof InetSocketAddress) {
+            InetSocketAddress local = (InetSocketAddress) socketChannel.localAddress();
+            InetSocketAddress remote = (InetSocketAddress) socketChannel.remoteAddress();
+
+            return StandardFiveTuple.from(Protocol.TCP, remote.getPort(), local.getPort(),
+                    StaticIpAddress.of(remote.getAddress()), StaticIpAddress.of(local.getAddress()));
+        } else {
+            throw new IllegalArgumentException("Only InetSocketAddress is accepted");
+        }
     }
 
     /**
@@ -54,8 +63,16 @@ public final class Util {
      */
     public static StandardFiveTuple generateFiveTupleFrom(DatagramChannel datagramChannel) {
         Objects.requireNonNull(datagramChannel, "DatagramChannel");
-        return StandardFiveTuple.from(Protocol.UDP, datagramChannel.remoteAddress().getPort(), datagramChannel.localAddress().getPort(),
-                StaticIpAddress.of(datagramChannel.remoteAddress().getAddress()), StaticIpAddress.of(datagramChannel.localAddress().getAddress()));
+
+        if (datagramChannel.localAddress() instanceof InetSocketAddress && datagramChannel.remoteAddress() instanceof InetSocketAddress) {
+            InetSocketAddress local = (InetSocketAddress) datagramChannel.localAddress();
+            InetSocketAddress remote = (InetSocketAddress) datagramChannel.remoteAddress();
+
+            return StandardFiveTuple.from(Protocol.UDP, remote.getPort(), local.getPort(),
+                    StaticIpAddress.of(remote.getAddress()), StaticIpAddress.of(local.getAddress()));
+        } else {
+            throw new IllegalArgumentException("Only InetSocketAddress is accepted");
+        }
     }
 
     /**
@@ -66,8 +83,16 @@ public final class Util {
      */
     public static StandardFiveTuple generateFiveTupleFrom(DatagramPacket datagramPacket) {
         Objects.requireNonNull(datagramPacket, "DatagramChannel");
-        return StandardFiveTuple.from(Protocol.UDP, datagramPacket.sender().getPort(), datagramPacket.recipient().getPort(),
-                StaticIpAddress.of(datagramPacket.sender().getAddress()), StaticIpAddress.of(datagramPacket.recipient().getAddress()));
+
+        if (datagramPacket.recipient() instanceof InetSocketAddress && datagramPacket.sender() instanceof InetSocketAddress) {
+            InetSocketAddress local = (InetSocketAddress) datagramPacket.recipient();
+            InetSocketAddress remote = (InetSocketAddress) datagramPacket.sender();
+
+            return StandardFiveTuple.from(Protocol.UDP, remote.getPort(), local.getPort(),
+                    StaticIpAddress.of(remote.getAddress()), StaticIpAddress.of(local.getAddress()));
+        } else {
+            throw new IllegalArgumentException("Only InetSocketAddress is accepted");
+        }
     }
 
     /**
