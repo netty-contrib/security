@@ -17,3 +17,6 @@ Upcoming Features:
 * Pluggable Metrics
 * Configuration File Persistence
 <br>
+
+## Flow Chart
+![Flow Chart](FlowChart.png "FlowChart")
