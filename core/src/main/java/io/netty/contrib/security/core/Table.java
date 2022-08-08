@@ -18,13 +18,14 @@ package io.netty.contrib.security.core;
 import java.util.List;
 
 /**
- * A table holds its priority, name, rules and default action.
+ * A table is a collection of rules sorted according to its priority number.
+ *
+ *
  */
 public interface Table extends RuleLookup, Comparable<Table>, LockMechanism {
 
     /**
-     * Priority is a number which defines the order
-     * of this {@link Table} in main routing table.
+     * This number determines on which level a table will be placed
      */
     int priority();
 
