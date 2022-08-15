@@ -24,6 +24,7 @@
 
   <modules>
     <module>core</module>
+    <module>examples</module>
   </modules>
 
   <groupId>io.netty.contrib</groupId>
