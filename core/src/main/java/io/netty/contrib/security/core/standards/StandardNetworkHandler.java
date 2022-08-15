@@ -70,7 +70,6 @@ public class StandardNetworkHandler implements ChannelHandler {
         } else {
             logger.error("Unknown Channel Type: " + ctx.channel().getClass().getSimpleName());
         }
-        ctx.fireChannelActive();
     }
 
     @Override
