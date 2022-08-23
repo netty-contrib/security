@@ -121,7 +121,7 @@ public final class AllowOnlyFromSpecificRange {
 
                 Thread.sleep(1000 * 5); // Wait for 5 seconds before checking connection status
 
-                assert !socket.isClosed() : "Socket must be open in this stage";
+                assert socket.isClosed() : "Socket must be closed in this stage";
                 System.out.println("Socket Closed");
             }
 
