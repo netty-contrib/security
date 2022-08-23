@@ -52,7 +52,7 @@ class StandardFilterTest {
         Tables tables = StandardTables.create();
         tables.addTable(table);
 
-        Filter filter = new StandardFilter(tables, Action.REJECT);
+        Filter filter = StandardFilter.of(tables, Action.REJECT);
         Action action = filter.validateChannelActive(StandardFiveTuple.from(Protocol.TCP, 23, 80,
                 StaticIpAddress.of("10.10.10.10"), StaticIpAddress.of("192.168.1.100")));
 
@@ -81,7 +81,7 @@ class StandardFilterTest {
         Tables tables = StandardTables.create();
         tables.addTable(table);
 
-        Filter filter = new StandardFilter(tables, Action.REJECT);
+        Filter filter = StandardFilter.of(tables, Action.REJECT);
         DatagramPacket packet = new DatagramPacket(BufferAllocator.onHeapUnpooled().allocate(0),
                 new InetSocketAddress("192.168.1.100", 80), new InetSocketAddress("10.10.10.2", 22));
         Action action = filter.validateObject(packet, StandardFiveTuple.from(Protocol.UDP, 22, 80,
@@ -114,7 +114,7 @@ class StandardFilterTest {
         Tables tables = StandardTables.create();
         tables.addTable(table);
 
-        Filter filter = new StandardFilter(tables, Action.REJECT);
+        Filter filter = StandardFilter.of(tables, Action.REJECT);
         Buffer buffer = BufferAllocator.onHeapUnpooled().allocate(0);
         Action action = filter.validateObject(buffer, StandardFiveTuple.from(Protocol.TCP, 22, 80,
                 StaticIpAddress.of("10.10.10.10"), StaticIpAddress.of("192.168.1.100")));

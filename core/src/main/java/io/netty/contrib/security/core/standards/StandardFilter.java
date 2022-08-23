@@ -39,6 +39,11 @@ public class StandardFilter implements BasicFilter {
     private final Tables tables;
     private final Action defaultAction;
 
+    private StandardFilter(Tables tables, Action defaultAction) {
+        this.tables = Objects.requireNonNull(tables, "Tables");
+        this.defaultAction = Objects.requireNonNull(defaultAction, "DefaultAction");
+    }
+
     /**
      * Create a new instance {@link StandardFilter}
      *
@@ -47,9 +52,8 @@ public class StandardFilter implements BasicFilter {
      *                      not match against any rules in the {@link Tables}
      * @throws NullPointerException If any parameter is {@code null}
      */
-    public StandardFilter(Tables tables, Action defaultAction) {
-        this.tables = Objects.requireNonNull(tables, "Tables");
-        this.defaultAction = Objects.requireNonNull(defaultAction, "DefaultAction");
+    public static StandardFilter of(Tables tables, Action defaultAction) {
+        return new StandardFilter(tables, defaultAction);
     }
 
     @Override

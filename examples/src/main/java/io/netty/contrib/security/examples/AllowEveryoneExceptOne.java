@@ -70,7 +70,7 @@ public final class AllowEveryoneExceptOne {
 
             // Create Filter, associate Tables and assign default action.
             // Accept all connections if they don't match to any rule.
-            Filter filter = new StandardFilter(tables, Action.ACCEPT);
+            Filter filter = StandardFilter.of(tables, Action.ACCEPT);
             StandardNetworkHandler networkHandler = new StandardNetworkHandler(filter);
 
             ServerBootstrap serverBootstrap = new ServerBootstrap()
