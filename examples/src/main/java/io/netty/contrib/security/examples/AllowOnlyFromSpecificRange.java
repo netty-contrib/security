@@ -18,7 +18,6 @@ package io.netty.contrib.security.examples;
 import io.netty.contrib.security.core.Action;
 import io.netty.contrib.security.core.Filter;
 import io.netty.contrib.security.core.IpAddresses;
-import io.netty.contrib.security.core.Ports;
 import io.netty.contrib.security.core.Protocol;
 import io.netty.contrib.security.core.StaticIpAddress;
 import io.netty.contrib.security.core.Table;
@@ -43,19 +42,20 @@ import java.net.InetAddress;
 import java.net.Socket;
 
 /**
- * In this example, we allow all clients (src: 0.0.0.0/0) except one client (src: 127.0.0.2).
+ * In this example, we will allow clients from specific range (127.0.1.0/24)
+ * and reject other ranges.
  */
-public final class AllowEveryoneExceptOne {
+public final class AllowOnlyFromSpecificRange {
 
     public static void main(String[] args) throws Exception {
         EventLoopGroup eventLoopGroup = new MultithreadEventLoopGroup(NioHandler.newFactory());
 
         try {
 
-            // Create a rule to drop TCP source 127.0.0.2
+            // Create a rule to accept TCP source 127.0.1.0/24
             StandardRule rule = StandardRule.newBuilder(true)
-                    .withAction(Action.REJECT)
-                    .withSourceIpAddresses(IpAddresses.create(StaticIpAddress.of("127.0.0.2")))
+                    .withAction(Action.ACCEPT)
+                    .withSourceIpAddresses(IpAddresses.create(StaticIpAddress.of("127.0.1.2")))
                     .withProtocol(Protocol.TCP)
                     .build();
 
@@ -71,7 +71,7 @@ public final class AllowEveryoneExceptOne {
 
             // Create Filter, associate Tables and assign default action.
             // Accept all connections if they don't match to any rule.
-            Filter filter = StandardFilter.of(tables, Action.ACCEPT);
+            Filter filter = StandardFilter.of(tables, Action.REJECT);
             StandardNetworkHandler networkHandler = new StandardNetworkHandler(filter);
 
             ServerBootstrap serverBootstrap = new ServerBootstrap()
@@ -84,7 +84,7 @@ public final class AllowEveryoneExceptOne {
                             socketChannel.pipeline().addLast(new SimpleChannelInboundHandler<>() {
                                 @Override
                                 public void channelActive(ChannelHandlerContext ctx) {
-                                    throw new IllegalStateException("This channel should never be active");
+                                    System.out.println("New Connection From: " + ctx.channel().remoteAddress());
                                 }
 
                                 @Override
@@ -97,7 +97,8 @@ public final class AllowEveryoneExceptOne {
 
             Channel channel = serverBootstrap.bind(9110).asStage().get();
 
-            try (Socket socket = new Socket("127.0.0.1", 9110, InetAddress.getByName("127.0.0.2"), 0)) {
+            // Make request using 127.0.1.2 source IP
+            try (Socket socket = new Socket("127.0.0.1", 9110, InetAddress.getByName("127.0.1.2"), 0)) {
                 if (socket.isConnected()) {
                     System.out.println("Socket Connected");
                 } else {
@@ -106,7 +107,21 @@ public final class AllowEveryoneExceptOne {
 
                 Thread.sleep(1000 * 5); // Wait for 5 seconds before checking connection status
 
-                assert socket.isClosed() : "Socket must be closed in this stage";
+                assert !socket.isClosed() : "Socket must be open in this stage";
+                System.out.println("Socket Closed");
+            }
+
+            // Make request using 127.0.0.1 source IP
+            try (Socket socket = new Socket("127.0.0.1", 9110, InetAddress.getByName("127.0.0.1"), 0)) {
+                if (socket.isConnected()) {
+                    System.out.println("Socket Connected");
+                } else {
+                    System.out.println("Connection not established yet");
+                }
+
+                Thread.sleep(1000 * 5); // Wait for 5 seconds before checking connection status
+
+                assert !socket.isClosed() : "Socket must be open in this stage";
                 System.out.println("Socket Closed");
             }
 
