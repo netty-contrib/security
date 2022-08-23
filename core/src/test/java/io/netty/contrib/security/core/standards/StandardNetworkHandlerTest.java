@@ -47,7 +47,7 @@ class StandardNetworkHandlerTest {
         ChannelHandlerContext ctx = mock(ChannelHandlerContext.class);
 
         Tables tables = StandardTables.create();
-        StandardNetworkHandler standardNetworkHandler = new StandardNetworkHandler(new StandardFilter(tables, Action.DROP));
+        StandardNetworkHandler standardNetworkHandler = new StandardNetworkHandler(StandardFilter.of(tables, Action.DROP));
 
         // Mock Addresses because we need them in FiveTuple
         when(socketChannel.localAddress()).thenReturn(new InetSocketAddress("10.10.10.1", 8080));
@@ -98,7 +98,7 @@ class StandardNetworkHandlerTest {
         when(datagramChannel.isConnected()).thenReturn(false);
 
         Tables tables = StandardTables.create();
-        StandardNetworkHandler standardNetworkHandler = new StandardNetworkHandler(new StandardFilter(tables, Action.DROP));
+        StandardNetworkHandler standardNetworkHandler = new StandardNetworkHandler(StandardFilter.of(tables, Action.DROP));
 
         StandardTable table = StandardTable.of(1, "MainTable");
         table.unlock();
