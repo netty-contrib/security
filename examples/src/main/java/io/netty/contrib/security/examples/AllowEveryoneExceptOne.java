@@ -22,6 +22,7 @@ import io.netty.contrib.security.core.Ports;
 import io.netty.contrib.security.core.Protocol;
 import io.netty.contrib.security.core.StaticIpAddress;
 import io.netty.contrib.security.core.Table;
+import io.netty.contrib.security.core.Tables;
 import io.netty.contrib.security.core.standards.StandardFilter;
 import io.netty.contrib.security.core.standards.StandardNetworkHandler;
 import io.netty.contrib.security.core.standards.StandardRule;
@@ -40,28 +41,35 @@ import io.netty5.channel.socket.nio.NioServerSocketChannel;
 import java.net.InetAddress;
 import java.net.Socket;
 
+/**
+ * In this example, we allow all clients (src: 0.0.0.0/0) except one client (src: 127.0.0.2).
+ */
 public final class AllowEveryoneExceptOne {
 
     public static void main(String[] args) throws Exception {
         EventLoopGroup eventLoopGroup = new MultithreadEventLoopGroup(NioHandler.newFactory());
+
         try {
-            StandardRule rule = StandardRule.newBuilder()
+
+            // Create a rule to drop TCP source 127.0.0.2
+            StandardRule rule = StandardRule.newBuilder(true)
                     .withAction(Action.REJECT)
                     .withSourceIpAddresses(IpAddresses.create(StaticIpAddress.of("127.0.0.2")))
-                    .withSourcePorts(Ports.ANY_PORT)
-                    .withDestinationPorts(Ports.ANY_PORT)
-                    .withDestinationIpAddress(IpAddresses.ACCEPT_ANY)
                     .withProtocol(Protocol.TCP)
                     .build();
 
-            Table table = StandardTable.of(1, "SimpleTable");
+            // Create Basic Table
+            Table table = StandardTable.of(1, "BasicTable");
             table.unlock();
             table.addRule(rule);
             table.lock();
 
-            StandardTables tables = StandardTables.create();
+            // Create StandardTables
+            Tables tables = StandardTables.create();
             tables.addTable(table);
 
+            // Create Filter, associate Tables and assign default action.
+            // Accept all connections if they don't match to any rule.
             Filter filter = new StandardFilter(tables, Action.ACCEPT);
             StandardNetworkHandler networkHandler = new StandardNetworkHandler(filter);
 
@@ -97,7 +105,7 @@ public final class AllowEveryoneExceptOne {
 
                 Thread.sleep(1000 * 5); // Wait for 5 seconds before checking connection status
 
-                assert socket.isClosed() : "SocketState";
+                assert socket.isClosed() : "Socket must be closed in this stage";
                 System.out.println("Socket Closed");
             }
         } finally {
