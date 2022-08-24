@@ -19,6 +19,9 @@ import io.netty.contrib.security.core.Action;
 import io.netty.contrib.security.core.Filter;
 import io.netty.contrib.security.core.FiveTuple;
 import io.netty.contrib.security.core.Util;
+import io.netty.contrib.security.core.events.ChannelClosedEvent;
+import io.netty.contrib.security.core.events.ObjectDroppedAndChannelClosedEvent;
+import io.netty.contrib.security.core.events.ObjectDroppedEvent;
 import io.netty5.channel.Channel;
 import io.netty5.channel.ChannelHandler;
 import io.netty5.channel.ChannelHandlerContext;
@@ -64,9 +67,11 @@ public class StandardNetworkHandler implements ChannelHandler {
             if (channel.isConnected()) {
                 FiveTuple fiveTuple = Util.generateFiveTupleFrom(channel);
                 channelActive0(ctx, fiveTuple);
+            } else {
+                // Channel is not connected, it means we have to generate FiveTuple
+                // everytime a DatagramPacket arrives.
+                ctx.fireChannelActive();
             }
-            // Channel is not connected, it means we have to generate FiveTuple
-            // everytime a DatagramPacket arrives.
         } else {
             logger.error("Unknown Channel Type: " + ctx.channel().getClass().getSimpleName());
         }
@@ -86,6 +91,7 @@ public class StandardNetworkHandler implements ChannelHandler {
             ctx.fireChannelActive();
         } else if (action == Action.REJECT || action == Action.DROP) {
             ctx.channel().close();
+            ctx.sendOutboundEvent(ChannelClosedEvent.INSTANCE);
         } else {
             throw new IllegalArgumentException("Invalid Action: " + action);
         }
@@ -114,10 +120,12 @@ public class StandardNetworkHandler implements ChannelHandler {
                 break;
             case DROP:
                 drop(msg);
+                ctx.fireChannelInboundEvent(ObjectDroppedEvent.INSTANCE);
                 break;
             case REJECT:
                 drop(msg);
                 ctx.channel().close();
+                ctx.fireChannelInboundEvent(ObjectDroppedAndChannelClosedEvent.INSTANCE);
                 break;
             default:
                 throw new IllegalArgumentException("Invalid Action: " + action);
