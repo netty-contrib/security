@@ -128,7 +128,7 @@ public final class StaticIpAddress implements Address {
 
     @Override
     public String toString() {
-        return "ClientIpAddress{" +
+        return "StaticIpAddress{" +
                 "address=" + address +
                 ", addressV4=" + addressV4 +
                 ", addressV6=" + addressV6 +
