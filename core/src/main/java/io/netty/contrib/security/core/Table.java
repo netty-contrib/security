@@ -19,8 +19,6 @@ import java.util.List;
 
 /**
  * A table is a collection of rules sorted according to its priority number.
- *
- *
  */
 public interface Table extends RuleLookup, Comparable<Table>, LockMechanism {
 
